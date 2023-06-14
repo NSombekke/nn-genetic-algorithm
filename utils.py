@@ -36,5 +36,3 @@ def weight2bin(weight: float, num_bits: int = 8, min_w: float = -3.0, max_w: flo
   bin2int = int(((1 << num_bits) - 1) * (weight - min_w) / (max_w - min_w) + 0.5)
   bin_string = format(bin2int, 'b').zfill(num_bits)
   return bin_string
-
-print((8 * 100 * 100 * 4) * 8)
