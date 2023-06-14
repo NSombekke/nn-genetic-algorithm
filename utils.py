@@ -1,3 +1,5 @@
+import numpy as np
+
 def bin2weight(bin_string: str, min_w: float = -3.0, max_w: float = 3.0) -> float:
   """
   Convert a bit string to a weight in the neural network.
@@ -82,6 +84,29 @@ def weights2chrom(weights: list, num_bits_w: int = 8, min_w: float = -3.0, max_w
   weights = flatten_list(weights)
   chrom = ''.join([weight2bin(weight, num_bits_w, min_w, max_w) for weight in weights])
   return chrom
+
+def weights2numpy(weights: list, num_inputs: int, num_hidden: int|list|tuple, num_outputs: int, bias: bool = True) -> list:
+  """
+  Convert a list of weights into list of numpy arrays of correct shape.
+  
+  Arguments:
+    weights: The list of weights for each layer in the neural network.
+    num_inputs: The number of inputs to the neural network.
+    num_hidden: The number of hidden layers in the neural network.
+    num_outputs: The number of outputs from the neural network.
+    bias: Whether or not to include bias in the neural network.
+    
+  Returns:
+    layer_arrays: The list of numpy arrays for each layer in the neural network.
+  """
+  layer_arrays = []
+  layers = flatten_list([num_inputs, num_hidden, num_outputs])
+  for i in range(len(layers) - 1):
+    layer_array_flat = np.array(weights[i])
+    layer_shape = (layers[i] + 1, layers[i + 1]) if bias else (layers[i], layers[i + 1])
+    layer_array = layer_array_flat.reshape(layer_shape)
+    layer_arrays.append(layer_array)
+  return layer_arrays
 
 def chrom_length(num_inputs: int, num_hidden: int|list|tuple, num_outputs: int, bias: bool = True,
                  num_bits_w: int = 8):
